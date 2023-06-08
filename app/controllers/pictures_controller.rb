@@ -7,6 +7,7 @@ class PicturesController < ApplicationController
   end
 
   def show
+    @picture = Picture.find(params[:id])
   end
 
   def new
@@ -14,50 +15,46 @@ class PicturesController < ApplicationController
   end
 
   def edit
+    @picture = Picture.find(params[:id])
   end
 
   def create
     @picture = Picture.new(picture_params)
-
-    respond_to do |format|
-      if @picture.save
-        format.html { redirect_to picture_url(@picture), notice: "Picture was successfully created." }
-        format.json { render :show, status: :created, location: @picture }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @picture.errors, status: :unprocessable_entity }
-      end
+    @picture.user_id = current_user.id
+    if @picture.save
+      redirect_to new_picture_path, notice: "作成しました！"
+    else
+      render :new
     end
   end
 
+  def confirm
+    @picture = Picture.new(picture_params)
+    @picture.user_id = current_user.id
+    render :new if @picture.invalid?
+  end
+
   def update
-    respond_to do |format|
-      if @picture.update(picture_params)
-        format.html { redirect_to picture_url(@picture), notice: "Picture was successfully updated." }
-        format.json { render :show, status: :ok, location: @picture }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @picture.errors, status: :unprocessable_entity }
-      end
+    @picture = Picture.find(params[:id])
+    if @picture.update(picture_params)
+      redirect_to picture_path, notice: "編集しました！"
+    else
+      render :edit
     end
   end
 
   def destroy
     @picture.destroy
-
-    respond_to do |format|
-      format.html { redirect_to pictures_url, notice: "Picture was successfully destroyed." }
-      format.json { head :no_content }
-    end
+    redirect_to pictures_path, notice:"削除しました！"
   end
 
   private
 
-    def set_picture
-      @picture = Picture.find(params[:id])
+    def picture_params
+      params.require(:picture).permit(:image, :image_cache)
     end
 
-    def picture_params
-      params.require(:picture).permit(:image, :image_cache, :user_id)
+    def set_picture
+      @picture = Picture.find(params[:id])
     end
 end
