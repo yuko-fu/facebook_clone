@@ -19,18 +19,16 @@ class PicturesController < ApplicationController
   end
 
   def create
-    @picture = Picture.new(picture_params)
-    @picture.user_id = current_user.id
+    @picture = current_user.pictures.build(picture_params)
     if @picture.save
-      redirect_to new_picture_path, notice: "作成しました！"
+      redirect_to pictures_path, notice: "作成しました！"
     else
       render :new
     end
   end
 
   def confirm
-    @picture = Picture.new(picture_params)
-    @picture.user_id = current_user.id
+    @picture = current_user.pictures.build(picture_params)
     render :new if @picture.invalid?
   end
 
@@ -51,7 +49,7 @@ class PicturesController < ApplicationController
   private
 
     def picture_params
-      params.require(:picture).permit(:image, :image_cache)
+      params.require(:picture).permit(:image, :image_cache, :content)
     end
 
     def set_picture
