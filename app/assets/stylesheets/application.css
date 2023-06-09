@@ -22,9 +22,10 @@ header {
   background-color : blue;
   color: white;
   font-weight: bold;
-  height: 70px;
-  font-size: 1.5rem
-  text-align: center; 
+  height: 50px;
+  font-size: 1.5rem;
+  text-align: center;
+  padding-top: 20px;
 }
 
 footer {
@@ -34,11 +35,10 @@ footer {
   position: absolute;
   bottom: 0;
   display: table;
-
-}
-
-p {
+  color: white;
   text-align: center;
   vertical-align: middle;
   display: table-cell;
+
 }
+
