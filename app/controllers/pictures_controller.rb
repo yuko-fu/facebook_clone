@@ -7,7 +7,6 @@ class PicturesController < ApplicationController
   end
 
   def show
-    @picture = Picture.find(params[:id])
   end
 
   def new
@@ -15,7 +14,6 @@ class PicturesController < ApplicationController
   end
 
   def edit
-    @picture = Picture.find(params[:id])
   end
 
   def create
@@ -33,9 +31,8 @@ class PicturesController < ApplicationController
   end
 
   def update
-    @picture = Picture.find(params[:id])
     if @picture.update(picture_params)
-      redirect_to picture_path, notice: "編集しました！"
+      redirect_to pictures_path, notice: "編集しました！"
     else
       render :edit
     end
@@ -48,11 +45,12 @@ class PicturesController < ApplicationController
 
   private
 
-    def picture_params
-      params.require(:picture).permit(:image, :image_cache, :content)
-    end
+  def set_picture
+    @picture = Picture.find(params[:id])
+  end
 
-    def set_picture
-      @picture = Picture.find(params[:id])
-    end
+  def picture_params
+    params.require(:picture).permit(:image, :image_cache, :content, :id)
+  end
+
 end
